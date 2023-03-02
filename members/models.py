@@ -7,6 +7,18 @@ from multiselectfield import MultiSelectField
 from django_countries.fields import CountryField
 
 
+PREFERENCE_OPTIONS = (
+    (1, 'Quiet Location'),
+    (2, 'By the Sea'),
+    (3, 'Swimming Pool'),
+    (4, 'Pet Friendly'),
+    (5, 'Family Friendly'),
+    (6, 'Couples'),
+    (7, 'City Life'),
+    (8, 'Outdoor Space'),
+)
+
+
 class Profile(models.Model):
     """
     Creates a member profile, a member can be both host and a guest user.
@@ -21,16 +33,6 @@ class Profile(models.Model):
     postcode = models.CharField(max_length=12, null=True)
     country = CountryField(blank_label='Country *', null=False, blank=False)
     group_size = models.PositiveSmallIntegerField(null=True)
-    PREFERENCE_OPTIONS = (
-        (1, 'Quiet Location'),
-        (2, 'By the Sea'),
-        (3, 'Swimming Pool'),
-        (4, 'Pet Friendly'),
-        (5, 'Family Friendly'),
-        (6, 'Couples'),
-        (7, 'City Life'),
-        (8, 'Outdoor Space'),
-    )
     preferences = MultiSelectField(
         max_length=100, blank=True, choices=PREFERENCE_OPTIONS
         )
