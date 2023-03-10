@@ -10,7 +10,9 @@ from sand_castles.permissions import IsOwnerOrReadOnly
 class ProfileList(APIView):
     def get(self, request):
         members = Profile.objects.all()
-        serializer = ProfileSerializer(members, many=True)
+        serializer = ProfileSerializer(
+            members, many=True, context={'request': request}
+            )
         return Response(serializer.data)
 
 
@@ -28,12 +30,14 @@ class ProfileDetail(APIView):
 
     def get(self, request, pk):
         member = self.get_object(pk)
-        serializer = ProfileSerializer(member)
+        serializer = ProfileSerializer(member, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk):
         member = self.get_object(pk)
-        serializer = ProfileSerializer(member, data=request.data)
+        serializer = ProfileSerializer(
+            member, data=request.data, context={'request': request}
+            )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
