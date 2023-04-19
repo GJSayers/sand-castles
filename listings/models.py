@@ -1,10 +1,10 @@
 from django.db import models
 from django_countries.fields import CountryField
 
-from members.models import Member
+from members.models import Profile
 
 
-class Listing(models.model):
+class Listing(models.Model):
     AMENITIES = (
         ('Dishwasher', 'Dishwasher'),
         ('Iron', 'Iron'),
@@ -27,20 +27,24 @@ class Listing(models.model):
     )
     title = models.CharField(max_length=25, null=False, blank=False)
     slug = models.SlugField(max_length=200, unique=True)
-    image_primary = models.Image
+    image_primary = models.ImageField(null=True)
+    image_secondary = models.ImageField(null=True)
+    image_tertiary = models.ImageField(null=True)
+    image_url_primary = models.URLField(null=True)
+    image_url_secondary = models.URLField(null=True)
+    image_url_tertiary = models.URLField(null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     published = models.BooleanField(default=False)
     listing_city = models.CharField(max_length=20, null=False, blank=False)
-    listing_country = models.CountryField(max_length=20, null=False,
+    listing_country = CountryField(max_length=20, null=False,
                                           blank=False)
     listing_owner = models.ForeignKey(Profile, on_delete=models.SET_NULL,
                                       null=True, blank=True,
                                       related_name='listings')
-    ratings = models.OneToManyField(Ratings, null=True, blank=True)
     bedrooms = models.IntegerField()
     max_occupancy = models.IntegerField()
-    amenities = models.CharField(choices=AMENITIES)
-    available_services = models.Charfield(choices=SERVICES, null=True,
+    amenities = models.CharField(max_length=200, choices=AMENITIES)
+    available_services = models.CharField(max_length=200, choices=SERVICES, null=True,
                                           blank=True)
     favourites = models.ManyToManyField(Profile, related_name='favourite',
                                         blank=True)
@@ -68,6 +72,6 @@ class Ratings(models.Model):
         (6, "Bad experience"),
     )
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    review = models.TextField(null=False, Blank=False, Default="")
+    review = models.TextField(null=False, blank=False, default="")
     satisfaction = models.CharField(max_length=50,
                                     choices=SATISFACTION_OPTIONS)
