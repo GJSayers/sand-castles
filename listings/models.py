@@ -1,5 +1,7 @@
 from django.db import models
 from django_countries.fields import CountryField
+from multiselectfield import MultiSelectField
+from django.utils.text import slugify
 
 from members.models import Profile
 
@@ -43,8 +45,8 @@ class Listing(models.Model):
                                       related_name='listings')
     bedrooms = models.IntegerField()
     max_occupancy = models.IntegerField()
-    amenities = models.CharField(max_length=200, choices=AMENITIES)
-    available_services = models.CharField(max_length=200, choices=SERVICES, null=True,
+    amenities = MultiSelectField(max_length=200, choices=AMENITIES)
+    available_services = MultiSelectField(max_length=200, choices=SERVICES, null=True,
                                           blank=True)
     favourites = models.ManyToManyField(Profile, related_name='favourite',
                                         blank=True)
@@ -60,6 +62,10 @@ class Listing(models.Model):
 
     def bookings_count(self):
         return self.bookings.count()
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Listing, self).save(*args, **kwargs)
 
 
 class Ratings(models.Model):
