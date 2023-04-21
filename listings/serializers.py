@@ -35,9 +35,6 @@ class ListingSerializer(serializers.ModelSerializer):
     available_services = serializers.MultipleChoiceField(choices=SERVICES)
     slug = serializers.SlugField(required=False)
 
-    
-    
-
     def validate_image(self, value):
         if value.size > 2 * 1024 * 1024:
             raise serializers.ValidationError('Image size larger than 2MB!')
