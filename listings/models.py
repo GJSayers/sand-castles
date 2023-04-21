@@ -39,14 +39,15 @@ class Listing(models.Model):
     published = models.BooleanField(default=False)
     listing_city = models.CharField(max_length=20, null=False, blank=False)
     listing_country = CountryField(max_length=20, null=False,
-                                          blank=False)
+                                   blank=False)
     listing_owner = models.ForeignKey(Profile, on_delete=models.SET_NULL,
                                       null=True, blank=True,
                                       related_name='listings')
     bedrooms = models.IntegerField()
     max_occupancy = models.IntegerField()
     amenities = MultiSelectField(max_length=200, choices=AMENITIES)
-    available_services = MultiSelectField(max_length=200, choices=SERVICES, null=True,
+    available_services = MultiSelectField(max_length=200, choices=SERVICES,
+                                          null=True,
                                           blank=True)
     favourites = models.ManyToManyField(Profile, related_name='favourite',
                                         blank=True)
@@ -62,7 +63,7 @@ class Listing(models.Model):
 
     def bookings_count(self):
         return self.bookings.count()
-    
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Listing, self).save(*args, **kwargs)

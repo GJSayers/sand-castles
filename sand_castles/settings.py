@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'multiselectfield',
     'members',
     'listings',
+    'bookings',
 ]
 
 MIDDLEWARE = [
